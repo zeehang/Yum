@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.michaelzhang.yum">
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".DisplayMessageActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SetupBluetoothActivity"
+            android:parentActivityName=".MainActivity"></activity>
+
+        <service
+            android:name=".BluetoothService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

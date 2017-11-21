@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Yum!</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="start_bluetooth">Setup Bluetooth</string>
+    <string name="call_yelp">Call Yelp API with Location and Parameters</string>
+    <string name="swipe_interface">Swipe Interface</string>
+    <string name="results_page">Results Page</string>
 </resources>
