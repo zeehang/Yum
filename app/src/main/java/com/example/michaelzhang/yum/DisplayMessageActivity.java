@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+
 public class DisplayMessageActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +16,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
         //Get the intent
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String message = "hello teset";
 
         TextView textView = findViewById(R.id.textView);
         textView.setText(message);
