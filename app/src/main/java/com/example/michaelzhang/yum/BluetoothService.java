@@ -33,9 +33,9 @@ public class BluetoothService {
 
     // Generate some UUIDs!
     private static final UUID MY_UUID_SECURE =
-            UUID.randomUUID(); //TODO: SHould this be random? or sequenced for multiple threads?
+            UUID.fromString("31a51cba-5e51-4760-806b-b0d43e12fe58"); //TODO: SHould this be random? or sequenced for multiple threads?
     private static final UUID MY_UUID_INSECURE =
-            UUID.randomUUID();
+            UUID.fromString("abf93e00-8718-4497-a12e-f48e8f61d65d");
 
     // Member fields
     private final BluetoothAdapter mAdapter;

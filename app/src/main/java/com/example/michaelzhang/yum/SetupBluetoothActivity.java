@@ -30,14 +30,28 @@ public class SetupBluetoothActivity extends AppCompatActivity {
         }
     }
 
-    private void startHost(View view) {
+    public void startHost(View view) {
         Intent intent = new Intent(this, HostConnectionActivity.class);
         startActivity(intent);
     }
 
     public void startClient(View view) {
         Intent intent = new Intent(this, ClientConnectionActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Constants.CLIENT_SEARCH);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //check the request
+        if(requestCode == Constants.CLIENT_SEARCH) {
+            if(resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                String MACtoConnect = extras.getString("device_address");
+                Intent mIntentClient = new Intent(this, ClientRoomActivity.class);
+                mIntentClient.putExtra("device_address", MACtoConnect);
+                startActivity(mIntentClient);
+            }
+        }
     }
 
     private void checkLocPermissions() {

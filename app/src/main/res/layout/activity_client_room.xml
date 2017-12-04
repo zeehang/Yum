@@ -6,4 +6,24 @@
     android:layout_height="match_parent"
     tools:context="com.example.michaelzhang.yum.ClientRoomActivity">
 
+    <ListView
+        android:id="@+id/userLIst"
+        android:layout_width="0dp"
+        android:layout_height="257dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="sendTest"
+        android:text="send"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="352dp" />
 </android.support.constraint.ConstraintLayout>
