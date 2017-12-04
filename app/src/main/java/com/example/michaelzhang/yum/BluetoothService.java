@@ -151,9 +151,9 @@ public class BluetoothService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(4);
+        Message msg = mHandler.obtainMessage(Constants.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString("device_name", device.getName());
+        bundle.putString(Constants.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -199,7 +199,7 @@ public class BluetoothService {
 
     private void connectionFailed() {
         //send a failure message back
-        Message msg = mHandler.obtainMessage(5); // this is a toast
+        Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST); // this is a toast
         Bundle bundle = new Bundle();
         bundle.putString("toast", "Unable to connect device, restarting service");
         msg.setData(bundle);
@@ -212,7 +212,7 @@ public class BluetoothService {
 
     private void connectionLost() {
         // send a filure message back
-        Message msg = mHandler.obtainMessage(5); // this is a toast
+        Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST); // this is a toast
         Bundle bundle = new Bundle();
         bundle.putString("toast", "device connection was lost - restarting");
         msg.setData(bundle);
@@ -398,7 +398,7 @@ public class BluetoothService {
                     bytes = mmInStream.read(buffer);
 
                     //send obtained bytes to the UI activity
-                    mHandler.obtainMessage(2, bytes, -1, buffer).sendToTarget(); //Message_read = 2
+                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer).sendToTarget(); //Message_read = 2
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
@@ -413,7 +413,7 @@ public class BluetoothService {
                 mmOutStream.write(buffer);
 
                 //share the sent message back to the UI activity
-                mHandler.obtainMessage(3, -1, -1, buffer).sendToTarget();// Message_sent =3
+                mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();// Message_sent =3
 
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
