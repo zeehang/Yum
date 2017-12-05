@@ -72,6 +72,7 @@ public class ClientRoomActivity extends AppCompatActivity {
                     if(readMessage.getType() == Constants.MESSAGE_LIST_ROOM_DEVICES ) {
                         //we've recieved an updated list of devices in the room!
                         try {
+                            mRoomUsersViewArrayAdapter.clear();
                             mRoomUsersViewArrayAdapter.addAll(deserializeArrayList(readMessage.getData()));
                         } catch (IOException e) {
                             e.printStackTrace();
