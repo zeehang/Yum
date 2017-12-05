@@ -15,9 +15,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        String location = "90024";
+
+        String hello = "90024";
         Intent intent = new Intent(MainActivity.this, YelpActivity.class);
-        intent.putExtra("location", location);
+        intent.putExtra("location", hello);
         startActivity(intent);
     }
 }
