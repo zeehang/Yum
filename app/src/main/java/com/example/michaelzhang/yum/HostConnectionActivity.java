@@ -16,6 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import static com.example.michaelzhang.yum.Serializer.deserialize;
+import static com.example.michaelzhang.yum.Serializer.serialize;
+import static com.example.michaelzhang.yum.Serializer.deserializeArrayList;
+import static com.example.michaelzhang.yum.Serializer.serializeArrayList;
 
 public class HostConnectionActivity extends AppCompatActivity {
 
@@ -60,6 +63,9 @@ public class HostConnectionActivity extends AppCompatActivity {
                         mCurrentConnectedUsers.add(addName);
                         mRoomUsersArrayAdapter.clear();
                         mRoomUsersArrayAdapter.addAll(mCurrentConnectedUsers);
+
+                        // and then send back the new listing to all the clients
+                        sendUpdatedRoomList();
                     }
                     break;
             }
@@ -125,6 +131,27 @@ public class HostConnectionActivity extends AppCompatActivity {
         String writeMessage = "this is from the host";
         byte[] writeOut =  writeMessage.getBytes(StandardCharsets.UTF_8);
         mBtService.write(writeOut);
+    }
+
+    /**
+     * Sends updated room list to the client
+     */
+    private void sendUpdatedRoomList() {
+        // we need to serialize the arrayList first
+        byte[] writeOut = null;
+        try {
+            writeOut = serializeArrayList(mCurrentConnectedUsers);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DataSendObject mObject = new DataSendObject(Constants.MESSAGE_LIST_ROOM_DEVICES, writeOut);
+        byte toSend[] = null;
+        try {
+            toSend = serialize(mObject);
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: error recovery here
+        }
+        mBtService.write(toSend);
     }
 
     private void initializeConnection() {
