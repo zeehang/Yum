@@ -9,13 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.michaelzhang.yum.Serializer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static com.example.michaelzhang.yum.Serializer.deserialize;
 import static com.example.michaelzhang.yum.Serializer.serialize;
+import static com.example.michaelzhang.yum.Serializer.deserializeArrayList;
 
 public class ClientRoomActivity extends AppCompatActivity {
 
@@ -26,6 +31,10 @@ public class ClientRoomActivity extends AppCompatActivity {
     private BluetoothService mBtService;
 
     private BluetoothDevice mBtHost;
+
+    private ListView mRoomUsersView;
+
+    private ArrayAdapter<String> mRoomUsersViewArrayAdapter;
 
     private BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -52,10 +61,23 @@ public class ClientRoomActivity extends AppCompatActivity {
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     //construct a string from valid bytes
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    CharSequence text = readMessage.toString();
-                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
+                    DataSendObject readMessage = null;
+                    try {
+                        readMessage = deserialize(readBuf);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if(readMessage.getType() == Constants.MESSAGE_LIST_ROOM_DEVICES ) {
+                        //we've recieved an updated list of devices in the room!
+                        try {
+                            mRoomUsersViewArrayAdapter.clear();
+                            mRoomUsersViewArrayAdapter.addAll(deserializeArrayList(readMessage.getData()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
             }
         }
@@ -73,6 +95,12 @@ public class ClientRoomActivity extends AppCompatActivity {
         //we want to get the name from the intent as well
         mFriendlyName = extras.getString("friendly_name");
 
+        // link the listview
+        mRoomUsersView = findViewById(R.id.client_room_list);
+        mRoomUsersViewArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+
+        //add the adapter
+        mRoomUsersView.setAdapter(mRoomUsersViewArrayAdapter);
         initializeConnection();
     }
 
@@ -81,6 +109,18 @@ public class ClientRoomActivity extends AppCompatActivity {
         mBtHost = mBtAdapter.getRemoteDevice(mConnectToDeviceAddress);
         //then we connect!
         mBtService.connect(mBtHost, true);
+    }
+
+    public void sendTest(View v) {
+        byte[] writeOut =  mFriendlyName.getBytes(StandardCharsets.UTF_8);
+        DataSendObject mObject = new DataSendObject(Constants.MESSAGE_INITIAL_CLIENT_CONNECT, writeOut);
+        byte toSend[] = null;
+        try {
+            toSend = serialize(mObject);
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: error recovery here
+        }
+        mBtService.write(toSend);
     }
 
     public void sendName() {
