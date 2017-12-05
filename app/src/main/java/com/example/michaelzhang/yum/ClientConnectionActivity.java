@@ -118,11 +118,15 @@ public class ClientConnectionActivity extends AppCompatActivity {
         if(mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
         }
+        //clear the oldlist
+        mNewDevicesArrayAdapter.clear();
 
         mBtAdapter.startDiscovery();
     }
 
-    //onclick listender for all devices in listviews
+    /**
+     * Onclick listener for the devices in the listview TODO:we need to add a UI thing designating previous devices
+     */
     private AdapterView.OnItemClickListener mDeviceClickListener =
             new AdapterView.OnItemClickListener() {
                 @Override
@@ -140,7 +144,9 @@ public class ClientConnectionActivity extends AppCompatActivity {
                     finish();
                 }
             };
-    // the  broadcastreivier for discovered devices
+    /**
+     * The broadcast reciever for discovered devices TODO: clear this when we hit the refresh button
+     */
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

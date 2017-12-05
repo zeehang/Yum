@@ -65,6 +65,17 @@ public class BluetoothService {
         mHandler = handler;
     }
 
+    //update the main activity of status!
+    private synchronized void updateActivityState() {
+        mState = getState();
+
+        Log.d(TAG, "updateActivityState() " + mNewState + " -> " + mState);
+        mNewState = mState;
+
+        // Give the new state to the Handler so the UI Activity can update
+        mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE, mNewState, -1).sendToTarget();
+    }
+
     // return the current connection state
     public synchronized int getState() {
         return mState;
@@ -74,7 +85,7 @@ public class BluetoothService {
     public synchronized void start() {
         Log.d(TAG, "start");
 
-        //cancel any thread attempting to make a conncection
+        //cancel any thread attempting to make a connection
         if (mConnectThread != null) {
             mConnectThread.cancel();
             mConnectThread = null;
@@ -95,6 +106,8 @@ public class BluetoothService {
             mInsecureAcceptThread = new AcceptThread(false);
             mInsecureAcceptThread.start();
         }
+
+        updateActivityState();
 
     }
 
@@ -117,7 +130,8 @@ public class BluetoothService {
         // Start the thread to connect with the given device
         mConnectThread = new ConnectThread(device, secure);
         mConnectThread.start();
-        //
+        //update activity
+        updateActivityState();
     }
 
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device,
@@ -156,6 +170,9 @@ public class BluetoothService {
         bundle.putString(Constants.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+
+        //update activity state
+        updateActivityState();
     }
 
     public synchronized void stop() {
@@ -181,6 +198,8 @@ public class BluetoothService {
             mInsecureAcceptThread = null;
         }
         mState = STATE_NONE;
+
+        updateActivityState();
     }
 
     // write to connected thread in an unsync manner
@@ -207,6 +226,9 @@ public class BluetoothService {
 
         mState = STATE_NONE;
 
+        //update activity status
+        updateActivityState();
+
         BluetoothService.this.start();
     }
 
@@ -219,6 +241,12 @@ public class BluetoothService {
         mHandler.sendMessage(msg);
 
         mState = STATE_NONE;
+
+        //update UI
+        updateActivityState();
+
+        // Start the service over to restart listening mode
+        BluetoothService.this.start();
     }
 
     //this thread listens for incoming connections - behaves like a server side client

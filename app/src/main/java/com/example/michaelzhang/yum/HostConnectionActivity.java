@@ -6,8 +6,16 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
+import static com.example.michaelzhang.yum.Serializer.deserialize;
 
 public class HostConnectionActivity extends AppCompatActivity {
 
@@ -16,6 +24,8 @@ public class HostConnectionActivity extends AppCompatActivity {
     private ListView mRoomUsersView;
 
     private ArrayAdapter<String> mRoomUsersArrayAdapter;
+
+    private ArrayList<String> mCurrentConnectedUsers;
 
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -36,8 +46,21 @@ public class HostConnectionActivity extends AppCompatActivity {
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     //construct a string from valid bytes
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    mRoomUsersArrayAdapter.add("added " + readMessage);
+                    DataSendObject readMessage = null;
+                    try {
+                        readMessage = deserialize(readBuf);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if(readMessage.getType() == Constants.MESSAGE_INITIAL_CLIENT_CONNECT ) {
+                        //if it's a client connecting add it to the list
+                        String addName = new String(readMessage.getData(), StandardCharsets.UTF_8);
+                        mCurrentConnectedUsers.add(addName);
+                        mRoomUsersArrayAdapter.clear();
+                        mRoomUsersArrayAdapter.addAll(mCurrentConnectedUsers);
+                    }
                     break;
             }
         }
@@ -54,6 +77,11 @@ public class HostConnectionActivity extends AppCompatActivity {
             startActivity(discoverableIntent);
         }
     }
+
+    /**
+     * Sends the start message to the clients
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +101,30 @@ public class HostConnectionActivity extends AppCompatActivity {
 
         mOutStringBuffer = new StringBuffer("");
 
+        // initializes button for the host to send command to go to the next activity
+        Button continueButton = (Button) findViewById(R.id.button_continue);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick (View v) {
+                goToYelpActivity();
+            }
+        });
+
+        // add the host name to the user list and initialize
+        Intent passedIntent = getIntent();
+        Bundle extras = passedIntent.getExtras();
+        mCurrentConnectedUsers = new ArrayList<String>();
+        mCurrentConnectedUsers.add(extras.getString("friendly_name"));
+        mRoomUsersArrayAdapter.addAll(mCurrentConnectedUsers);
         initializeConnection();
+    }
+
+    /**
+     * Proceeds to the next activity by sending a start message to the clients
+     */
+    private void goToYelpActivity() {
+        String writeMessage = "this is from the host";
+        byte[] writeOut =  writeMessage.getBytes(StandardCharsets.UTF_8);
+        mBtService.write(writeOut);
     }
 
     private void initializeConnection() {

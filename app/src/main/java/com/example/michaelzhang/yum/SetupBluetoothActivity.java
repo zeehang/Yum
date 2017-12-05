@@ -21,6 +21,7 @@ public class SetupBluetoothActivity extends AppCompatActivity {
     private Handler btHandler;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BluetoothService mBTService = null;
+    private TextView nameView;
 
     private void checkBluetoothState() {
         if(!mBluetoothAdapter.isEnabled()) {
@@ -32,6 +33,7 @@ public class SetupBluetoothActivity extends AppCompatActivity {
 
     public void startHost(View view) {
         Intent intent = new Intent(this, HostConnectionActivity.class);
+        intent.putExtra("friendly_name", nameView.getText().toString());
         startActivity(intent);
     }
 
@@ -49,6 +51,7 @@ public class SetupBluetoothActivity extends AppCompatActivity {
                 String MACtoConnect = extras.getString("device_address");
                 Intent mIntentClient = new Intent(this, ClientRoomActivity.class);
                 mIntentClient.putExtra("device_address", MACtoConnect);
+                mIntentClient.putExtra("friendly_name", nameView.getText().toString());
                 startActivity(mIntentClient);
             }
         }
@@ -76,8 +79,8 @@ public class SetupBluetoothActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_bluetooth);
+        nameView = findViewById(R.id.text_name);
         checkBluetoothState();
         checkLocPermissions();
-
     }
 }

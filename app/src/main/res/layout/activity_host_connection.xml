@@ -8,11 +8,10 @@
     tools:context="com.example.michaelzhang.yum.HostConnectionActivity">
 
     <Button
-        android:id="@+id/button_discoverable"
+        android:id="@+id/button_continue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:text="Continue"
         app:layout_constraintBottom_toBottomOf="parent"
