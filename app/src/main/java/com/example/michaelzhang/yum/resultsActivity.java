@@ -18,10 +18,15 @@ import java.io.InputStream;
 
 public class resultsActivity extends AppCompatActivity {
 
+    private Restaurant mRestaurant = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
+        Intent intent = getIntent();
+        mRestaurant = (Restaurant) intent.getSerializableExtra("restaurant");
 
         TextView businessName = findViewById(R.id.businessName);
         CardView wholeCard = findViewById(R.id.wholeCard);
@@ -30,21 +35,23 @@ public class resultsActivity extends AppCompatActivity {
 
         TextView businessLocation = findViewById(R.id.businessAddr);
 
-        String businessNameString = "In-N-Out";
-        String businessLocString = "1234 Glitrock Avenue";
+        String businessNameString = mRestaurant.getTitle();
+        String businessLocString = mRestaurant.getAddress();
 
-        String rating = "4.5"; // example String
+        String rating = mRestaurant.getRating();
+
+        String image = mRestaurant.getImageURL();
         double ratingDouble = Double.parseDouble(rating);
 
         // show The Image in a ImageView
         new DownloadImageTask(businessImage)
-                .execute("https://cdn.vox-cdn.com/thumbor/97Qk1jAVFMSmi5PMZOVPjlwj8_Y=/112x0:1932x1365/1200x800/filters:focal(112x0:1932x1365)/cdn.vox-cdn.com/uploads/chorus_image/image/47639083/7980042713_9e110b767e_k.0.0.jpg");
+                .execute(image);
 
 
         wholeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("https://www.yelp.com/biz/howlin-rays-los-angeles-3?adjust_creative=fHypZQSHGU8Zg4PkyaPopA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fHypZQSHGU8Zg4PkyaPopA");
+                Uri uri = Uri.parse(mRestaurant.getUrl());
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }

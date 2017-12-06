@@ -70,18 +70,6 @@
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/returnHomeBtn"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="26dp"
-        android:background="@drawable/squirclebtn"
-        android:onClick="returnHome"
-        android:textColor="@color/white"
-        android:text="Return Home" />
-
 </RelativeLayout>
 
 

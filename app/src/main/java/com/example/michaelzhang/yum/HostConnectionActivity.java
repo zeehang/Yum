@@ -23,20 +23,25 @@ import static com.example.michaelzhang.yum.Serializer.serializeArrayList;
 
 public class HostConnectionActivity extends AppCompatActivity {
 
-    private BluetoothService mBtService;
+    private static BluetoothService mBtService;
 
     private ListView mRoomUsersView;
 
-    private ArrayAdapter<String> mRoomUsersArrayAdapter;
+    private static ArrayAdapter<String> mRoomUsersArrayAdapter;
 
-    private ArrayList<String> mCurrentConnectedUsers;
+    private static ArrayList<String> mCurrentConnectedUsers;
 
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+    private static int doneClients = 0;
+
+    static ArrayList<String> preferredStrings = new ArrayList<String>();
+    static int[] preferredRestaurants = new int[100];
 
     //buffer for outoing messages
     private StringBuffer mOutStringBuffer;
 
-    private final Handler mHandler = new Handler() {
+    private static final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what) {
@@ -67,6 +72,18 @@ public class HostConnectionActivity extends AppCompatActivity {
 
                         // and then send back the new listing to all the clients
                         sendUpdatedRoomList();
+                    }
+                    if(readMessage.getType() == Constants.MESSAGE_APPROVED_CHOICES) {
+                        byte[] toTransform = readMessage.getData();
+                        try {
+                            preferredStrings = deserializeArrayList(toTransform);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        for(int i = 0; i < preferredStrings.size(); i++) {
+                            preferredRestaurants[i] += Integer.parseInt(preferredStrings.get(i));
+                        }
+                        doneClients++;
                     }
                     break;
             }
@@ -116,6 +133,11 @@ public class HostConnectionActivity extends AppCompatActivity {
             }
         });
 
+        //initialize preferredRestraunts
+        for (int i = 0; i < 100; i++) {
+            preferredRestaurants[i] = 0;
+        }
+
         // add the host name to the user list and initialize
         Intent passedIntent = getIntent();
         Bundle extras = passedIntent.getExtras();
@@ -123,6 +145,7 @@ public class HostConnectionActivity extends AppCompatActivity {
         mCurrentConnectedUsers.add(extras.getString("friendly_name"));
         mRoomUsersArrayAdapter.addAll(mCurrentConnectedUsers);
         initializeConnection();
+
     }
 
     /**
@@ -136,7 +159,7 @@ public class HostConnectionActivity extends AppCompatActivity {
     /**
      * Sends updated room list to the client
      */
-    private void sendUpdatedRoomList() {
+    private static void sendUpdatedRoomList() {
         // we need to serialize the arrayList first
         byte[] writeOut = null;
         try {
@@ -182,6 +205,44 @@ public class HostConnectionActivity extends AppCompatActivity {
                 intent.putExtra("location", zipCode);
                 intent.putExtra("id", "host");
                 startActivityForResult(intent, Constants.MESSAGE_YELP_START_SWIPE_HOST);
+            }
+        }
+
+        if(requestCode == Constants.MESSAGE_YELP_START_SWIPE_HOST) {
+            ArrayList<Restaurant> restaurants = (ArrayList<Restaurant>) data.getSerializableExtra("restaurants");
+            for(int i = 0; i < restaurants.size(); i++) {
+                preferredRestaurants[i] += restaurants.get(i).getChosen();
+            }
+//            while(doneClients < mCurrentConnectedUsers.size() -1) {
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            //TODO: check to see if all clients are done LOL
+            if(doneClients == mCurrentConnectedUsers.size() - 1) {
+                int max = 0;
+                int index = 0;
+                for(int i = 0; i < restaurants.size(); i++ ) {
+                    if(preferredRestaurants[i] > max) {
+                        max = preferredRestaurants[i];
+                        index = i;
+                    }
+                }
+                Log.d("host", Integer.toString(index));
+                
+                DataSendObject mObject = new DataSendObject(Constants.MESSAGE_FINAL_RESULT_JSON, (Integer.toString(index)).getBytes());
+                byte[] toSend = null;
+                try {
+                    toSend  = serialize(mObject);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mBtService.write(toSend);
+                Intent intent = new Intent(this, resultsActivity.class);
+                intent.putExtra("restaurant", restaurants.get(index));
+                startActivity(intent);
             }
         }
     }

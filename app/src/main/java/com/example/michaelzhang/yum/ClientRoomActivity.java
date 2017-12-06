@@ -17,10 +17,12 @@ import com.example.michaelzhang.yum.Serializer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import static com.example.michaelzhang.yum.Serializer.deserialize;
 import static com.example.michaelzhang.yum.Serializer.serialize;
 import static com.example.michaelzhang.yum.Serializer.deserializeArrayList;
+import static com.example.michaelzhang.yum.Serializer.serializeArrayList;
 
 public class ClientRoomActivity extends AppCompatActivity {
 
@@ -34,7 +36,11 @@ public class ClientRoomActivity extends AppCompatActivity {
 
     private ListView mRoomUsersView;
 
+    private int preferredIndex = 0;
+
     private ArrayAdapter<String> mRoomUsersViewArrayAdapter;
+
+    private ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
 
     private BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -86,6 +92,13 @@ public class ClientRoomActivity extends AppCompatActivity {
                         Log.d("clientroomact zippy: ", zipCode);
                         intent.putExtra("id", "client");
                         startActivityForResult(intent, Constants.MESSAGE_YELP_START_SWIPE_CLIENT);
+                    }
+                    if(readMessage.getType() == Constants.MESSAGE_FINAL_RESULT_JSON) {
+                        Log.d("test", readMessage.getData().toString());
+                        //preferredIndex = Integer.parseInt(readMessage.getData().toString());
+                        //Intent intent = new Intent(ClientRoomActivity.this, resultsActivity.class);
+                        //intent.putExtra("restaurant", restaurants.get(preferredIndex));
+                        //startActivity(intent);
                     }
                     break;
             }
@@ -142,5 +155,34 @@ public class ClientRoomActivity extends AppCompatActivity {
             e.printStackTrace(); // TODO: error recovery here
         }
         mBtService.write(toSend);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //check the request
+        if(requestCode == Constants.MESSAGE_YELP_START_SWIPE_CLIENT) {
+            if(resultCode == RESULT_OK) {
+                int[] preferred = data.getIntArrayExtra("preferred");
+                ArrayList<String> preferredTransform = new ArrayList<String>();
+                for(int i = 0; i < preferred.length; i++) {
+                    preferredTransform.add(Integer.toString(preferred[i]));
+                }
+                DataSendObject toSend = null;
+                try {
+                    toSend = new DataSendObject(Constants.MESSAGE_APPROVED_CHOICES, serializeArrayList(preferredTransform));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                byte[] toWrite = null;
+                try {
+                    toWrite = serialize(toSend);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mBtService.write(toWrite);
+                restaurants = (ArrayList<Restaurant>)data.getSerializableExtra("restaurants");
+            }
+        }
+
     }
 }

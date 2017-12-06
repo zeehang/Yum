@@ -6,11 +6,42 @@ package com.example.michaelzhang.yum.Model;
 
 public class Model {
 
-    public String title,image;
+    public String title;
+    public String image;
+    public String rating;
+    public String address;
+    public String url;
 
-    public Model(String title, String image) {
+    public String getRating() {
+        return rating;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Model(String title, String image, String rating, String address, String url) {
         this.title = title;
         this.image = image;
+        this.rating = rating;
+        this.address = address;
+        this.url = url;
     }
 
     public String getTitle() {
@@ -28,4 +59,6 @@ public class Model {
     public void setImage(String image) {
         this.image = image;
     }
+
+
 }

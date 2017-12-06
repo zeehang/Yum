@@ -33,11 +33,18 @@ public class Restaurant implements Serializable {
         return address;
     }
 
+    public int getChosen() { return chosen; }
+
+    public void decrement() { chosen --; }
+
+    public void increment() { chosen ++; }
+
     String title;
     String imageUrl;
     String url;
     String rating;
     String address;
+    int chosen;
 
     public Restaurant(JSONObject jsonObject) {
         try {
@@ -45,6 +52,7 @@ public class Restaurant implements Serializable {
             this.imageUrl = jsonObject.getString("image_url");
             this.url = jsonObject.getString("url");
             this.rating = jsonObject.getString("rating");
+            this.chosen = 0;
             if (jsonObject.getJSONObject("location").getString("address1") != "") {
                 this.address = jsonObject
                         .getJSONObject("location")

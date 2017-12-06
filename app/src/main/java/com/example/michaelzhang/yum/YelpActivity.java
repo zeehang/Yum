@@ -1,8 +1,11 @@
 package com.example.michaelzhang.yum;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 
 import com.example.michaelzhang.yum.Adapter.CardAdapter;
 import com.example.michaelzhang.yum.Model.Model;
@@ -25,7 +28,7 @@ public class YelpActivity extends AppCompatActivity {
     ArrayList<Restaurant> restaurants = new ArrayList<>();
     SwipeCardsView swipeCardsView;
     List<Model> modelList = new ArrayList<>();
-    BluetoothService mBtService;
+    boolean isHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,56 @@ public class YelpActivity extends AppCompatActivity {
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
 
+        swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
+            @Override
+            public void onShow(int index) {
+                Log.i("yelpactivity","test showing index = "+index);
+            }
+
+            @Override
+            public void onCardVanish(int index, SwipeCardsView.SlideType type) {
+                String orientation = "";
+                switch (type){
+                    case LEFT:
+                        restaurants.get(index).decrement();
+                        break;
+                    case RIGHT:
+                        restaurants.get(index).increment();
+                        break;
+                }
+                if(index == restaurants.size()-1) {
+                    Intent intent = new Intent();
+                    intent.putExtra("restaurants", restaurants);
+                    if(isHost) {
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
+                    else{
+                        int[] preferred = new int[restaurants.size()];
+                        for(int i = 0; i < restaurants.size(); i++) {
+                            preferred[i] = restaurants.get(i).getChosen();
+                        }
+                        intent.putExtra("preferred", preferred);
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onItemClick(View cardImageView, int index) {
+                //toast("点击了 position="+index);
+            }
+        });
+
         Intent intent = getIntent();
         String location = intent.getStringExtra("location");
+        if(intent.getStringExtra("id") == "host") {
+            isHost = true;
+        }
+        else {
+            isHost = false;
+        }
         getRestaurants(location);
     }
 
@@ -78,12 +129,9 @@ public class YelpActivity extends AppCompatActivity {
 
     private void getData() {
 
-            //modelList.add(new Model("Spiderman", "http://i.annihil.us/u/prod/marvel/i/mg/2/00/53710b14a320b.png"));
-            //modelList.add(new Model("Irom-Man", "https://lumiere-a.akamaihd.net/v1/images/usa_avengers_chi_ironman_n_cf2a66b6.png?region=0%2C0%2C300%2C300"));
-
         for(int i=0; i<restaurants.size(); i++)
         {
-            modelList.add(new Model(restaurants.get(i).getTitle(),restaurants.get(i).getImageURL()));
+            modelList.add(new Model(restaurants.get(i).getTitle(),restaurants.get(i).getImageURL(), restaurants.get(i).getRating(), restaurants.get(i).getAddress(), restaurants.get(i).getUrl()));
         }
 
             CardAdapter cardAdapter = new CardAdapter(modelList,this);
