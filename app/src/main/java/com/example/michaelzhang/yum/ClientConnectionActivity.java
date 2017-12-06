@@ -95,6 +95,8 @@ public class ClientConnectionActivity extends AppCompatActivity {
             String noDevices = getResources().getText(R.string.none_paired).toString();
             pairedDevicesArrayAdapter.add(noDevices);
         }
+
+        doDiscovery();
     }
 
     @Override

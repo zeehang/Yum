@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -150,6 +151,9 @@ public class HostConnectionActivity extends AppCompatActivity {
             toSend = serialize(mObject);
         } catch (IOException e) {
             e.printStackTrace(); // TODO: error recovery here
+        }
+        if(toSend == null) {
+            Log.d("hostconnectionactvity()", "trying to send null stuff from host!");
         }
         mBtService.write(toSend);
     }

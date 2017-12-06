@@ -61,6 +61,7 @@ public class ClientRoomActivity extends AppCompatActivity {
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     //construct a string from valid bytes
+                    Log.d("ClientRoomActivity()", "client recieved a message");
                     DataSendObject readMessage = null;
                     try {
                         readMessage = deserialize(readBuf);
@@ -108,7 +109,7 @@ public class ClientRoomActivity extends AppCompatActivity {
         //we create a bluetooth device based on the address that we were given from the prev activity
         mBtHost = mBtAdapter.getRemoteDevice(mConnectToDeviceAddress);
         //then we connect!
-        mBtService.connect(mBtHost, 0, true);
+        mBtService.connect(mBtHost, true);
     }
 
     public void sendTest(View v) {
