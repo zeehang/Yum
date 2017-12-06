@@ -3,4 +3,12 @@
     <string name="title_activity_yelp">YelpActivity</string>
     <string name="title_activity_start">StartActivity</string>
     <string name="begin">Begin</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="start_bluetooth">Setup Bluetooth</string>
+    <string name="call_yelp">Call Yelp API with Location and Parameters</string>
+    <string name="swipe_interface">Swipe Interface</string>
+    <string name="results_page">Results Page</string>
+    <string name="none_paired">No previously paired devices</string>
+    <string name="none_found">No devices were found</string>
 </resources>
