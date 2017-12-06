@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/food"
+    tools:context="com.example.michaelzhang.yum.StartActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:id="@+id/tvTitle"
+        android:textColor="#FFFFFF"
+        android:textSize="80sp"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationZ="20dp"
+        android:text="@string/begin"
+        android:id="@+id/btnBegin"
+        android:background="#FFFFFF"
+        android:textAllCaps="false"
+        android:layout_marginBottom="78dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <include layout="@layout/content_start" />
+
+</RelativeLayout>
