@@ -33,19 +33,10 @@ import permissions.dispatcher.RuntimePermissions;
 public class MainActivity extends AppCompatActivity {
 
     @Override
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-
-    public void nextAct(View view) {
-        Intent intent = new Intent(this, resultsActivity.class);
-        startActivity(intent);
-    }
-
-    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-    public void onClick(View view) {
         Log.v("MainActivity", "onClick");
         final Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
@@ -80,7 +71,19 @@ public class MainActivity extends AppCompatActivity {
         String zip_code = address.getPostalCode();
         Intent intent = new Intent(MainActivity.this, YelpActivity.class);
         intent.putExtra("location", zip_code);
+        intent.putExtra("btService", getIntent().getSerializableExtra("btService"));
         startActivity(intent);
+    }
+
+
+    public void nextAct(View view) {
+        Intent intent = new Intent(this, resultsActivity.class);
+        startActivity(intent);
+    }
+
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    public void onClick(View view) {
+
     }
 
 }

@@ -25,6 +25,7 @@ public class YelpActivity extends AppCompatActivity {
     ArrayList<Restaurant> restaurants = new ArrayList<>();
     SwipeCardsView swipeCardsView;
     List<Model> modelList = new ArrayList<>();
+    BluetoothService mBtService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -18,13 +18,14 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
-public class BluetoothService {
+public class BluetoothService implements Serializable{
     //Adapted from the BluetoothChat example code provided under the Android Developers site
     //Debugging
     private static final String TAG = "BluetoothService";
@@ -48,6 +49,7 @@ public class BluetoothService {
     private ConnectedThread mConnectedThread;
     private int mState;
     private int mNewState;
+    private boolean isHost;
 
     // multiple connection fields
     private ArrayList<ConnectedThread> mConnectedThreads;
@@ -100,6 +102,10 @@ public class BluetoothService {
 
         // Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE, mNewState, -1).sendToTarget();
+    }
+
+    public boolean isHost() {
+        return isHost;
     }
 
     // return the current connection state

@@ -129,9 +129,8 @@ public class HostConnectionActivity extends AppCompatActivity {
      * Proceeds to the next activity by sending a start message to the clients
      */
     private void goToYelpActivity() {
-        String writeMessage = "this is from the host";
-        byte[] writeOut =  writeMessage.getBytes(StandardCharsets.UTF_8);
-        mBtService.write(writeOut);
+        Intent intent  = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**
