@@ -23,7 +23,7 @@ public class StartActivity extends AppCompatActivity {
         beginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                Intent intent = new Intent(StartActivity.this, SetupBluetoothActivity.class);
                 startActivity(intent);
             }
         });
