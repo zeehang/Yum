@@ -15,13 +15,24 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+<!--    <Button
+        android:id="@+id/bt_launch_activity"
+        android:onClick="sendMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Launch Activity"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        style="@style/Widget.AppCompat.Button.Colored"/>-->
+
     <Button
         android:id="@+id/button"
-        android:layout_width="88dp"
-        android:layout_height="48dp"
-        android:onClick="nextAct"
-        android:text="Button"
-        tools:layout_editor_absoluteX="257dp"
-        tools:layout_editor_absoluteY="435dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yelp"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="409dp"
+        android:onClick="onClick"/>
 
 </android.support.constraint.ConstraintLayout>
