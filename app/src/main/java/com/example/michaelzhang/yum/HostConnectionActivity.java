@@ -112,7 +112,7 @@ public class HostConnectionActivity extends AppCompatActivity {
         Button continueButton = (Button) findViewById(R.id.button_continue);
         continueButton.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
-                goToYelpActivity();
+                goToMainActivity();
             }
         });
 
@@ -128,9 +128,9 @@ public class HostConnectionActivity extends AppCompatActivity {
     /**
      * Proceeds to the next activity by sending a start message to the clients
      */
-    private void goToYelpActivity() {
+    private void goToMainActivity() {
         Intent intent  = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Constants.MESSAGE_CONTINUE_TO_YELP);
     }
 
     /**
@@ -160,6 +160,30 @@ public class HostConnectionActivity extends AppCompatActivity {
     private void initializeConnection() {
         ensureDiscoverable();
         mBtService.start();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //check the request
+        if(requestCode == Constants.MESSAGE_CONTINUE_TO_YELP) {
+            if(resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                String zipCode = extras.getString("location");
+
+                DataSendObject locationSend = new DataSendObject(Constants.MESSAGE_CONTINUE_TO_YELP, zipCode.getBytes());
+                byte[] toWrite = null;
+                try {
+                    toWrite = serialize(locationSend);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mBtService.write(toWrite);
+                Intent intent = new Intent(this, YelpActivity.class);
+                intent.putExtra("location", zipCode);
+                intent.putExtra("id", "host");
+                startActivityForResult(intent, Constants.MESSAGE_YELP_START_SWIPE_HOST);
+            }
+        }
     }
 
     // we need to make the host discoverable

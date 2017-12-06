@@ -28,7 +28,8 @@ public class Constants {
     public static final int MESSAGE_CONTINUE_TO_YELP = 8; // sent by the host to the clients after the room activity
     public static final int MESSAGE_INITIAL_CLIENT_CONNECT = 9; // initial client connection - CONTAINS clients friendly name in String
     public static final int MESSAGE_ACK = 10; // acknowledgment that we've received things
-    public static final int MESSAGE_YELP__START_JSON_ARRAY = 11; // the yelp json sent from the host to clients at the beginning
+    public static final int MESSAGE_YELP_START_SWIPE_HOST = 11; // the yelp json sent from the host to clients at the beginning
+    public static final int MESSAGE_YELP_START_SWIPE_CLIENT = 14;
     public static final int MESSAGE_APPROVED_CHOICES_JSON_ARRAY = 12; // the yelp json that the client said yes to! sent back to the server
     public static final int MESSAGE_FINAL_RESULT_JSON = 13; // the final yelp JSON that the server sends back to the client
 }

@@ -79,6 +79,14 @@ public class ClientRoomActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
+                    if(readMessage.getType() == Constants.MESSAGE_CONTINUE_TO_YELP) {
+                        String zipCode = readMessage.getData().toString();
+                        Intent intent = new Intent(ClientRoomActivity.this, YelpActivity.class);
+                        intent.putExtra("location", "90024");
+                        Log.d("clientroomact zippy: ", zipCode);
+                        intent.putExtra("id", "client");
+                        startActivityForResult(intent, Constants.MESSAGE_YELP_START_SWIPE_CLIENT);
+                    }
                     break;
             }
         }

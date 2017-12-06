@@ -1,6 +1,7 @@
 package com.example.michaelzhang.yum;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -69,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
         }
         Address address = addresses.get(0);
         String zip_code = address.getPostalCode();
-        Intent intent = new Intent(MainActivity.this, YelpActivity.class);
+        Intent intent = new Intent();
         intent.putExtra("location", zip_code);
-        intent.putExtra("btService", getIntent().getSerializableExtra("btService"));
-        startActivity(intent);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 
 

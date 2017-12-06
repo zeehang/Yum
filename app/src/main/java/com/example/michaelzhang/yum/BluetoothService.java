@@ -108,6 +108,16 @@ public class BluetoothService implements Serializable{
         return isHost;
     }
 
+    public int getNumDevices() {
+        int toReturn = 0;
+        for(int i = 0; i < mConnectedThreads.size(); i++) {
+            if(mConnectedThreads.get(i) != null) {
+                toReturn++;
+            }
+        }
+        return toReturn;
+    }
+
     // return the current connection state
     public synchronized int getState() {
         return mState;
