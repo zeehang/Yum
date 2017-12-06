@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".YelpActivity"></activity>-->
+        <activity android:name=".resultsActivity">
+        </activity>
         <activity
             android:name=".YelpActivity"
             android:label="@string/title_activity_yelp"
@@ -42,5 +43,5 @@
         <activity android:name=".HostConnectionActivity" />
         <activity android:name=".ClientRoomActivity"></activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
