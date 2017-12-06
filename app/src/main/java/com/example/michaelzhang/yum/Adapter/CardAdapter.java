@@ -38,10 +38,10 @@ public class CardAdapter extends BaseCardAdapter {
 
     @Override
     public void onBindData(int position, View cardview) {
-            if(modelList == null || modelList.size() == 0)
-            {
-                return;
-            }
+        if(modelList == null || modelList.size() == 0)
+        {
+            return;
+        }
         ImageView imageView = (ImageView)cardview.findViewById(R.id.imageView);
         TextView textView = (TextView)cardview.findViewById(R.id.textView);
         Model model = modelList.get(position);
