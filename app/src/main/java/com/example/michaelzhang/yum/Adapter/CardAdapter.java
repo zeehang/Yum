@@ -1,6 +1,8 @@
 package com.example.michaelzhang.yum.Adapter;
 
 import android.content.Context;
+import android.os.Looper;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,10 +44,16 @@ public class CardAdapter extends BaseCardAdapter {
         {
             return;
         }
-        ImageView imageView = (ImageView)cardview.findViewById(R.id.imageView);
+        final ImageView imageView = (ImageView)cardview.findViewById(R.id.imageView);
         TextView textView = (TextView)cardview.findViewById(R.id.textView);
-        Model model = modelList.get(position);
+        final Model model = modelList.get(position);
         textView.setText(model.getTitle());
-        Picasso.with(context).load(model.getImage()).into(imageView);
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        uiHandler.post(new Runnable(){
+            @Override
+            public void run() {
+                Picasso.with(context).load(model.getImage()).into(imageView);
+            }
+        });
     }
 }
