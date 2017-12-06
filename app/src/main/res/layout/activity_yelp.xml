@@ -22,4 +22,14 @@
 
     <include layout="@layout/content_yelp" />
 
+    <com.huxq17.swipecardsview.SwipeCardsView
+        android:id="@+id/swipeCardsView"
+        android:background="#f3f3f3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alphaOffsetStep="20"
+        app:scaleOffsetStep="0.08"
+        app:yOffsetStep="20dp"
+        ></com.huxq17.swipecardsview.SwipeCardsView>
+
 </android.support.design.widget.CoordinatorLayout>
