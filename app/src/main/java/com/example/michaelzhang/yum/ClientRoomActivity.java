@@ -108,7 +108,7 @@ public class ClientRoomActivity extends AppCompatActivity {
         //we create a bluetooth device based on the address that we were given from the prev activity
         mBtHost = mBtAdapter.getRemoteDevice(mConnectToDeviceAddress);
         //then we connect!
-        mBtService.connect(mBtHost, true);
+        mBtService.connect(mBtHost, 0, true);
     }
 
     public void sendTest(View v) {
