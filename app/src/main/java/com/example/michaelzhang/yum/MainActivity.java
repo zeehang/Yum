@@ -7,13 +7,13 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.location.LocationListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void onClick(View view) {
-
+        Log.v("MainActivity", "onClick");
         final Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.v("MainActivity", "exit");
             return;
         }
 
@@ -68,4 +69,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("location", zip_code);
         startActivity(intent);
     }
+
+/*    public void sendMessage(View view) {
+        Intent startNewActivity = new Intent(this, YelpActivity.class);
+        startActivity(startNewActivity);
+    }*/
 }
