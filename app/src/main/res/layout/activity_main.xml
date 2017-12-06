@@ -15,4 +15,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:onClick="nextAct"
+        android:text="Button"
+        tools:layout_editor_absoluteX="257dp"
+        tools:layout_editor_absoluteY="435dp" />
+
 </android.support.constraint.ConstraintLayout>
