@@ -231,8 +231,8 @@ public class HostConnectionActivity extends AppCompatActivity {
                     }
                 }
                 Log.d("host", Integer.toString(index));
-                
-                DataSendObject mObject = new DataSendObject(Constants.MESSAGE_FINAL_RESULT_JSON, (Integer.toString(index)).getBytes());
+                String preferredIndex = Integer.toString(index);
+                DataSendObject mObject = new DataSendObject(Constants.MESSAGE_FINAL_RESULT_JSON, preferredIndex.getBytes(StandardCharsets.UTF_8));
                 byte[] toSend = null;
                 try {
                     toSend  = serialize(mObject);

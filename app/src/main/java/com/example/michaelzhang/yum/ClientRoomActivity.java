@@ -95,10 +95,12 @@ public class ClientRoomActivity extends AppCompatActivity {
                     }
                     if(readMessage.getType() == Constants.MESSAGE_FINAL_RESULT_JSON) {
                         Log.d("test", readMessage.getData().toString());
+                        String preferredIndexString = new String(readMessage.getData(), StandardCharsets.UTF_8);
+                        preferredIndex = Integer.parseInt(preferredIndexString);
                         //preferredIndex = Integer.parseInt(readMessage.getData().toString());
-                        //Intent intent = new Intent(ClientRoomActivity.this, resultsActivity.class);
-                        //intent.putExtra("restaurant", restaurants.get(preferredIndex));
-                        //startActivity(intent);
+                        Intent intent = new Intent(ClientRoomActivity.this, resultsActivity.class);
+                        intent.putExtra("restaurant", restaurants.get(preferredIndex));
+                        startActivity(intent);
                     }
                     break;
             }
