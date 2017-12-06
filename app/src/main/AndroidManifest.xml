@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -31,6 +33,15 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name=".DisplayMessageActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SetupBluetoothActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ClientConnectionActivity" />
+        <activity android:name=".HostConnectionActivity" />
+        <activity android:name=".ClientRoomActivity"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

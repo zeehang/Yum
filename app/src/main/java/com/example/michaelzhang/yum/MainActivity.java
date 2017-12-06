@@ -1,30 +1,30 @@
 package com.example.michaelzhang.yum;
 
-<<<<<<< HEAD
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-=======
+
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
+
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
-import android.view.View;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
->>>>>>> 39fe5269c0120a412f74193df6b6dbe4ada192d5
+
+
+
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -38,13 +38,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-<<<<<<< HEAD
+
     public void nextAct(View view) {
         Intent intent = new Intent(this, resultsActivity.class);
         startActivity(intent);
     }
-}
-=======
+
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void onClick(View view) {
         Log.v("MainActivity", "onClick");
@@ -84,9 +83,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-/*    public void sendMessage(View view) {
-        Intent startNewActivity = new Intent(this, YelpActivity.class);
-        startActivity(startNewActivity);
-    }*/
 }
->>>>>>> 39fe5269c0120a412f74193df6b6dbe4ada192d5
+
