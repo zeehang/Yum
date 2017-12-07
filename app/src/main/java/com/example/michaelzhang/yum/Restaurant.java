@@ -39,12 +39,18 @@ public class Restaurant implements Serializable {
 
     public void increment() { chosen ++; }
 
+    public double getLatitude() { return latitude; }
+
+    public double getLongitude() { return longitude; }
+
     String title;
     String imageUrl;
     String url;
     String rating;
     String address;
     int chosen;
+    double latitude;
+    double longitude;
 
     public Restaurant(JSONObject jsonObject) {
         try {
@@ -52,6 +58,9 @@ public class Restaurant implements Serializable {
             this.imageUrl = jsonObject.getString("image_url");
             this.url = jsonObject.getString("url");
             this.rating = jsonObject.getString("rating");
+            JSONObject gpsGson = jsonObject.getJSONObject("coordinates");
+            this.latitude = gpsGson.getDouble("latitude");
+            this.longitude = gpsGson.getDouble("longitude");
             this.chosen = 0;
             if (jsonObject.getJSONObject("location").getString("address1") != "") {
                 this.address = jsonObject

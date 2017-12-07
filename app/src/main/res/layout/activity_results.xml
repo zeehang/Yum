@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context=".resultsActivity" >-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".resultsActivity" >
+
+    <RelativeLayout
+        android:id="@+id/uberLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:layout_below="@+id/frameLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
+
+    </RelativeLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/frameLayout"
         android:layout_width="350dp"
         android:layout_height="500dp"
         android:layout_alignParentTop="true"
@@ -71,9 +84,9 @@
 
         </android.support.v7.widget.CardView>
 
-    </FrameLayout>
+</FrameLayout>
 
-<!--</RelativeLayout>-->
+</RelativeLayout>
 
 
 

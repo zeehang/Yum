@@ -10,6 +10,10 @@ public class Constants {
     public static final String YELP_BASE_URL = "https://api.yelp.com/v3/businesses/search?term=restaurants";
     public static final String YELP_LOCATION_QUERY_PARAMETER = "location";
 
+    public static final String UBER_CLIENT_ID = BuildConfig.UBER_ID;
+    public static final String UBER_CLIENT_SECRET = BuildConfig.UBER_SECRET;
+    public static final String UBER_SERVER_TOKEN = BuildConfig.UBER_TOKEN;
+
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
     public static final int MESSAGE_WRITE = 3;

@@ -35,6 +35,8 @@ public class HostConnectionActivity extends AppCompatActivity {
 
     private static Integer syncInt = 0;
 
+    private static boolean serverDone = false;
+
     private static CountDownLatch startSignal;
 
     private static ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
@@ -95,7 +97,7 @@ public class HostConnectionActivity extends AppCompatActivity {
                         }
 
                         doneClients++;
-                        if(doneClients == mCurrentConnectedUsers.size() -1 ) {
+                        if(doneClients == mCurrentConnectedUsers.size() - 1 && serverDone) {
                             sendFinalResults();
                         }
 
@@ -282,6 +284,7 @@ public class HostConnectionActivity extends AppCompatActivity {
             if(doneClients == mCurrentConnectedUsers.size() - 1) {
                 sendFinalResults();
             }
+            serverDone = true;
         }
     }
 
