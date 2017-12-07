@@ -12,9 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.io.Console;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import static com.example.michaelzhang.yum.Serializer.deserialize;
 import static com.example.michaelzhang.yum.Serializer.serialize;
@@ -31,9 +33,17 @@ public class HostConnectionActivity extends AppCompatActivity {
 
     private static ArrayList<String> mCurrentConnectedUsers;
 
+    private static Integer syncInt = 0;
+
+    private static CountDownLatch startSignal;
+
+    private static ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    private static int doneClients = 0;
+    private static volatile int doneClients = 0;
+
+    private static int mPreferredIndex  = 0;
 
     static ArrayList<String> preferredStrings = new ArrayList<String>();
     static int[] preferredRestaurants = new int[100];
@@ -41,7 +51,7 @@ public class HostConnectionActivity extends AppCompatActivity {
     //buffer for outoing messages
     private StringBuffer mOutStringBuffer;
 
-    private static final Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what) {
@@ -83,7 +93,14 @@ public class HostConnectionActivity extends AppCompatActivity {
                         for(int i = 0; i < preferredStrings.size(); i++) {
                             preferredRestaurants[i] += Integer.parseInt(preferredStrings.get(i));
                         }
+
                         doneClients++;
+                        if(doneClients == mCurrentConnectedUsers.size() -1 ) {
+                            sendFinalResults();
+                        }
+
+                        Log.d("host", "doneclients updated");
+
                     }
                     break;
             }
@@ -185,6 +202,53 @@ public class HostConnectionActivity extends AppCompatActivity {
         mBtService.start();
     }
 
+    private static void sendFinalResultsHandler() {
+        int max = 0;
+        int index = 0;
+        for(int i = 0; i < restaurants.size(); i++ ) {
+            if(preferredRestaurants[i] > max) {
+                max = preferredRestaurants[i];
+                index = i;
+            }
+        }
+        mPreferredIndex = index;
+        Log.d("host", Integer.toString(index));
+        String preferredIndex = Integer.toString(index);
+        DataSendObject mObject = new DataSendObject(Constants.MESSAGE_FINAL_RESULT_JSON, preferredIndex.getBytes(StandardCharsets.UTF_8));
+        byte[] toSend = null;
+        try {
+            toSend  = serialize(mObject);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mBtService.write(toSend);
+    }
+
+    private void sendFinalResults() {
+        int max = 0;
+        int index = 0;
+        for(int i = 0; i < restaurants.size(); i++ ) {
+            if(preferredRestaurants[i] > max) {
+                max = preferredRestaurants[i];
+                index = i;
+            }
+        }
+        mPreferredIndex = index;
+        Log.d("host", Integer.toString(index));
+        String preferredIndex = Integer.toString(index);
+        DataSendObject mObject = new DataSendObject(Constants.MESSAGE_FINAL_RESULT_JSON, preferredIndex.getBytes(StandardCharsets.UTF_8));
+        byte[] toSend = null;
+        try {
+            toSend  = serialize(mObject);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mBtService.write(toSend);
+        Intent intent = new Intent(this, resultsActivity.class);
+        intent.putExtra("restaurant", restaurants.get(index));
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //check the request
@@ -209,40 +273,14 @@ public class HostConnectionActivity extends AppCompatActivity {
         }
 
         if(requestCode == Constants.MESSAGE_YELP_START_SWIPE_HOST) {
-            ArrayList<Restaurant> restaurants = (ArrayList<Restaurant>) data.getSerializableExtra("restaurants");
+            restaurants = (ArrayList<Restaurant>) data.getSerializableExtra("restaurants");
             for(int i = 0; i < restaurants.size(); i++) {
                 preferredRestaurants[i] += restaurants.get(i).getChosen();
             }
-//            while(doneClients < mCurrentConnectedUsers.size() -1) {
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-            //TODO: check to see if all clients are done LOL
+
+            //TODO: check to see if all clients are done LOL - otherwise we handle this when the bluetooth threads all return
             if(doneClients == mCurrentConnectedUsers.size() - 1) {
-                int max = 0;
-                int index = 0;
-                for(int i = 0; i < restaurants.size(); i++ ) {
-                    if(preferredRestaurants[i] > max) {
-                        max = preferredRestaurants[i];
-                        index = i;
-                    }
-                }
-                Log.d("host", Integer.toString(index));
-                String preferredIndex = Integer.toString(index);
-                DataSendObject mObject = new DataSendObject(Constants.MESSAGE_FINAL_RESULT_JSON, preferredIndex.getBytes(StandardCharsets.UTF_8));
-                byte[] toSend = null;
-                try {
-                    toSend  = serialize(mObject);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mBtService.write(toSend);
-                Intent intent = new Intent(this, resultsActivity.class);
-                intent.putExtra("restaurant", restaurants.get(index));
-                startActivity(intent);
+                sendFinalResults();
             }
         }
     }

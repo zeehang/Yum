@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartActivity"
+        <activity
+            android:name=".StartActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".resultsActivity">
-        </activity>
+        <activity android:name=".resultsActivity"></activity>
         <activity
             android:name=".YelpActivity"
             android:label="@string/title_activity_yelp"
@@ -41,7 +42,7 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".ClientConnectionActivity" />
         <activity android:name=".HostConnectionActivity" />
-        <activity android:name=".ClientRoomActivity"></activity>
+        <activity android:name=".ClientRoomActivity" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
